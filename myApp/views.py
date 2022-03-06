@@ -10,7 +10,7 @@ def index(request):
 def sensorsData(request):
     if request.method == 'POST': 
         received_json_data=json.loads(request.body)
-        print(received_json_data.get('data')[0])
+        print(len(received_json_data.get('data')))
         
         return JsonResponse({"status": 'Success'}) 
     return JsonResponse({"status": 'Error'})
