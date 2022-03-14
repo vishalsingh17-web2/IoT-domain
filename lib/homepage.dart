@@ -12,8 +12,8 @@ import 'notifiers/csv_notifier.dart';
 import 'notifiers/orientation_notifiers.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, this.title}) : super(key: key);
-  final String? title;
+  const MyHomePage({Key? key, required this.name}) : super(key: key);
+  final String name;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -33,6 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
           userAcc: sensorsData.userAccelerometerValues,
           gyroscope: sensorsData.gyroscopeValues,
           magnetometer: sensorsData.magnetometerValues,
+          name: widget.name,
         );
         if (_csvData.length < 100) {
           _csvData.add([

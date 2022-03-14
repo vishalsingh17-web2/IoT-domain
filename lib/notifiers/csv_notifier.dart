@@ -26,12 +26,13 @@ class CsvHandler {
     required List<String> userAcc,
     required List<String> gyroscope,
     required List<String> magnetometer,
+    required String name,
   }) async {
     var statuses = await Permission.storage.isGranted;
     print(statuses);
     if (statuses) {
       String file = '/storage/emulated/0/Documents/';
-      File f = File(file + "dataSetAratrik.csv");
+      File f = File(file + name + '.csv');
       print("File created");
       bool checkIfFileExists = await f.exists();
       if (checkIfFileExists) {

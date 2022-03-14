@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:orientation/homepage.dart';
+import 'package:orientation/name_page.dart';
 import 'package:orientation/notifiers/orientation_notifiers.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const MyHomePage(),
+        home: const NameController(),
       ),
     );
   }
