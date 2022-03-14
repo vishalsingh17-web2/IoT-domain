@@ -27,15 +27,17 @@ class CsvHandler {
     required List<String> gyroscope,
     required List<String> magnetometer,
   }) async {
-    var statuses = await Permission.storage.request();
-    if (statuses.isGranted) {
+    var statuses = await Permission.storage.isGranted;
+    print(statuses);
+    if (statuses) {
       String file = '/storage/emulated/0/Documents/';
-      File f = File(file + "/dataSet.csv");
+      File f = File(file + "dataSetAratrik.csv");
+      print("File created");
       bool checkIfFileExists = await f.exists();
-      
       if (checkIfFileExists) {
         List<List<String>> rows = [
-          [...accelerometer, ...userAcc, ...gyroscope, ...magnetometer],["\n"]
+          [...accelerometer, ...userAcc, ...gyroscope, ...magnetometer],
+          ["\n"]
         ];
         String csv = const ListToCsvConverter(eol: "\n", fieldDelimiter: ",").convert(rows);
         f.writeAsString(csv, mode: FileMode.append);
@@ -43,7 +45,8 @@ class CsvHandler {
       } else {
         List<List<String>> rows = [
           headers,
-          [...accelerometer, ...userAcc, ...gyroscope, ...magnetometer],["\n"]
+          [...accelerometer, ...userAcc, ...gyroscope, ...magnetometer],
+          ["\n"]
         ];
         String csv = const ListToCsvConverter(eol: "\n", fieldDelimiter: ",").convert(rows);
         f.writeAsString(csv, mode: FileMode.append);
