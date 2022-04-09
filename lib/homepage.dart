@@ -12,8 +12,8 @@ import 'notifiers/csv_notifier.dart';
 import 'notifiers/orientation_notifiers.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.name}) : super(key: key);
-  final String name;
+  const MyHomePage({Key? key, required this.url}) : super(key: key);
+  final String url;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -21,6 +21,7 @@ class MyHomePage extends StatefulWidget {
 List<List<String>> _csvData = [];
 
 class _MyHomePageState extends State<MyHomePage> {
+  String status = "";
   @override
   void initState() {
     var sensorsData = Provider.of<SensorsData>(context, listen: false);
@@ -28,24 +29,30 @@ class _MyHomePageState extends State<MyHomePage> {
     Timer.periodic(
       const Duration(milliseconds: 200),
       (va) {
-        CsvHandler.generateCsvFile(
-          accelerometer: sensorsData.accelerometerValues,
-          userAcc: sensorsData.userAccelerometerValues,
-          gyroscope: sensorsData.gyroscopeValues,
-          magnetometer: sensorsData.magnetometerValues,
-          name: widget.name,
-        );
-        if (_csvData.length < 100) {
+        // CsvHandler.generateCsvFile(
+        //   accelerometer: sensorsData.accelerometerValues,
+        //   userAcc: sensorsData.userAccelerometerValues,
+        //   gyroscope: sensorsData.gyroscopeValues,
+        //   magnetometer: sensorsData.magnetometerValues,
+        //   name: widget.name,
+        // );
+
+        Future.microtask(() async {
           _csvData.add([
             ...sensorsData.accelerometerValues,
             ...sensorsData.userAccelerometerValues,
             ...sensorsData.gyroscopeValues,
             ...sensorsData.magnetometerValues,
           ]);
-        } else {
-          ApiHandler.sendData({"data": _csvData});
+          var value = await ApiHandler.sendData(
+            data: {"data": _csvData},
+            url: widget.url,
+          );
+          setState(() {
+            status = value.toString();
+          });
           _csvData = [];
-        }
+        });
       },
     );
     super.initState();
@@ -62,6 +69,10 @@ class _MyHomePageState extends State<MyHomePage> {
           body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Predicted activity: $status"),
+              ),
               Container(
                 padding: const EdgeInsets.all(16.0),
                 child: Text('Accelerometer: \n${sensorsData.accelerometerValues}'),

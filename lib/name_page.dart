@@ -22,7 +22,7 @@ class _NameControllerState extends State<NameController> {
           children: [
             Container(
               alignment: Alignment.bottomLeft,
-              child: const Text('NameController'),
+              child: const Text('API Controller'),
             ),
             const SizedBox(height: 8),
             TextFormField(
@@ -31,7 +31,7 @@ class _NameControllerState extends State<NameController> {
                 border: InputBorder.none,
                 filled: true,
                 fillColor: Colors.grey.shade200,
-                labelText: 'Name',
+                labelText: 'Endpoint',
               ),
             ),
             const SizedBox(height: 16),
@@ -40,7 +40,7 @@ class _NameControllerState extends State<NameController> {
                 Navigator.of(context).pushReplacement(
                   CupertinoPageRoute(
                     builder: (context) => MyHomePage(
-                      name: nameController.text,
+                      url: nameController.text,
                     ),
                   ),
                 );
