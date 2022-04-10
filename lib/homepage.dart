@@ -27,7 +27,7 @@ class _MyHomePageState extends State<MyHomePage> {
     var sensorsData = Provider.of<SensorsData>(context, listen: false);
 
     Timer.periodic(
-      const Duration(milliseconds: 200),
+      const Duration(seconds: 1),
       (va) {
         // CsvHandler.generateCsvFile(
         //   accelerometer: sensorsData.accelerometerValues,
@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ...sensorsData.accelerometerValues,
             ...sensorsData.userAccelerometerValues,
             ...sensorsData.gyroscopeValues,
-            ...sensorsData.magnetometerValues,
+            // ...sensorsData.magnetometerValues,
           ]);
           var value = await ApiHandler.sendData(
             data: {"data": _csvData},

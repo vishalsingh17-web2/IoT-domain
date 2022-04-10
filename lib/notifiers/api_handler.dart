@@ -8,9 +8,10 @@ class ApiHandler {
 
   static Future<dynamic> sendData({required Map<String, dynamic> data, required String url}) async {
     String link = 'http://$url/api/send';
+    print(link);
     var response = await http.post(Uri.parse(link), body: jsonEncode(data));
 
-    print(response.body);
+    // print(response.body);
     return response.body;
   }
 }
