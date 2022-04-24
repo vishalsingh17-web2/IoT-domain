@@ -18,7 +18,8 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-List<List<String>> _csvData = [];
+List<double> _csvData = [];
+List<double> accel = [];
 
 class _MyHomePageState extends State<MyHomePage> {
   String status = "";
@@ -27,8 +28,8 @@ class _MyHomePageState extends State<MyHomePage> {
     var sensorsData = Provider.of<SensorsData>(context, listen: false);
 
     Timer.periodic(
-      const Duration(seconds: 1),
-      (va) {
+      const Duration(milliseconds: 200),
+      (va) async {
         // CsvHandler.generateCsvFile(
         //   accelerometer: sensorsData.accelerometerValues,
         //   userAcc: sensorsData.userAccelerometerValues,
@@ -36,23 +37,35 @@ class _MyHomePageState extends State<MyHomePage> {
         //   magnetometer: sensorsData.magnetometerValues,
         //   name: widget.name,
         // );
+        List<String> data = [
+          ...sensorsData.accelerometerValues,
+          ...sensorsData.userAccelerometerValues,
+          // ...sensorsData.gyroscopeValues,
+          // ...sensorsData.magnetometerValues,
+        ];
+        List<String> acc = sensorsData.accelerometerValues;
+        for (int i = 0; i < data.length; i++) {
+          _csvData.add(double.parse(data[i]));
+        }
 
-        Future.microtask(() async {
-          _csvData.add([
-            ...sensorsData.accelerometerValues,
-            ...sensorsData.userAccelerometerValues,
-            ...sensorsData.gyroscopeValues,
-            // ...sensorsData.magnetometerValues,
-          ]);
+        for (int i = 0; i < acc.length; i++) {
+          accel.add(double.parse(acc[i]));
+        }
+
+        if (_csvData.length >= 240) {
           var value = await ApiHandler.sendData(
-            data: {"data": _csvData},
+            data: {
+              "data": _csvData.sublist(0, 240),
+              "accel": accel.sublist(0, 120),
+            },
             url: widget.url,
           );
           setState(() {
             status = value.toString();
           });
           _csvData = [];
-        });
+          accel = [];
+        }
       },
     );
     super.initState();

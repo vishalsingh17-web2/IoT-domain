@@ -11,7 +11,7 @@ class ApiHandler {
     print(link);
     var response = await http.post(Uri.parse(link), body: jsonEncode(data));
 
-    // print(response.body);
+    print(response.body);
     return response.body;
   }
 }
